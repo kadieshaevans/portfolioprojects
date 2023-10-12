@@ -1,15 +1,14 @@
---We view the dataset--
+/*We view the dataset*/
 SELECT * 
 FROM IMDBTop250Movies;
 
---We rename the table for ease--
+/*We rename the table for ease*/
 ALTER TABLE IMDBTop250Movies RENAME TO Movies;
-
 
 SELECT *
 FROM Movies;
 
---Top 5 Budgeted Movies--
+/*Top 5 Budgeted Movies*/
 SELECT name, budget
 FROM Movies 
 ORDER BY budget DESC 
@@ -18,15 +17,15 @@ LIMIT 5;
 /*We see a flaw. Princess Mononoke and 3 Idiots are both foreign films, and their budgets aren't listed in USD. 
 The currency for both need to be researched and updated into USD, which we will do now.*/
 
---Princess Mononoke update--
+/*Princess Mononoke update*/
 UPDATE Movies
 SET budget = REPLACE(budget, 2400000000, 23500000)
 
---3 Idiots Update--
+/*3 Idiots Update-*/
 UPDATE Movies 
 SET budget = REPLACE(budget, 550000000, 6700000)
 
---We retrieve the updated budgets.--
+/*We retrieve the updated budgets*/
 SELECT name, budget
 FROM Movies
 ORDER BY budget DESC
@@ -45,7 +44,7 @@ GROUP BY name
 ORDER BY box_office DESC 
 LIMIT 5;
 
-/*Top 10 Highest pProfit*/
+/*Top 10 Highest Profit*/
  SELECT name, budget, box_office, (box_office - budget) AS profit 
  FROM Movies
  ORDER BY profit DESC
@@ -62,6 +61,22 @@ GROUP BY genre
 ORDER BY genre_count DESC
 LIMIT 5
 
+/*Top Directors*/
+SELECT directors, COUNT(*) AS Number_of_movies 
+FROM Movies 
+GROUP BY directors 
+ORDER BY COUNT(*) DESC 
+LIMIT 10;
 
-SELECT directors, COUNT(*) AS Number_of_movies FROM Movies GROUP BY directors ORDER BY COUNT(*) DESC LIMIT 10;
+/*How Many Movies in Each Rating Category*/
+Select certificate, count(*) AS total
+FROM Movies
+group by certificate 
+order by total DESC
 
+/*Top 10 Best Years*/
+ SELECT year, COUNT(year) AS Number_of_Movies_Per_Year
+ FROM Movies
+ GROUP BY year
+ ORDER BY COUNT(year) DESC
+ Limit 10
