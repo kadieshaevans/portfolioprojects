@@ -1,27 +1,67 @@
-SELECT * FROM IMDBTop250Movies; 
+--We view the dataset--
+SELECT * 
+FROM IMDBTop250Movies;
+
+--We rename the table for ease--
 ALTER TABLE IMDBTop250Movies RENAME TO Movies;
-SELECT * FROM Movies
 
-SELECT name, rating FROM Movies ORDER BY rating DESC LIMIT 5;
 
-SELECT name, box_office FROM Movies GROUP BY name ORDER BY box_office DESC LIMIT 5;
+SELECT *
+FROM Movies;
 
-SELECT name, budget, box_office, (box_office - budget) AS profit FROM Movies ORDER BY profit DESC LIMIT 10;
+--Top 5 Budgeted Movies--
+SELECT name, budget
+FROM Movies 
+ORDER BY budget DESC 
+LIMIT 5;
 
-UPDATE Movies SET budget = REPLACE(budget, 2400000000, 23500000); --Princess Mononoke
-UPDATE Movies SET budget = REPLACE(budget, 550000000, 6700000); --3 Idiots
-SELECT name, budget FROM Movies ORDER BY budget DESC LIMIT 5;
+/*We see a flaw. Princess Mononoke and 3 Idiots are both foreign films, and their budgets aren't listed in USD. 
+The currency for both need to be researched and updated into USD, which we will do now.*/
 
-SELECT name, rating FROM Movies ORDER BY rating DESC LIMIT 5;
-SELECT name, box_office FROM Movies GROUP BY name ORDER BY box_office DESC LIMIT 5;
+--Princess Mononoke update--
+UPDATE Movies
+SET budget = REPLACE(budget, 2400000000, 23500000)
 
-SELECT name, budget, box_office, (box_office - budget) AS profit FROM Movies ORDER BY profit DESC LIMIT 10;
+--3 Idiots Update--
+UPDATE Movies 
+SET budget = REPLACE(budget, 550000000, 6700000)
 
-SELECT genre, COUNT(*) AS genre_count 
+--We retrieve the updated budgets.--
+SELECT name, budget
+FROM Movies
+ORDER BY budget DESC
+LIMIT 5
+
+/*Top 5 Rated Movies*/
+SELECT name, rating
+FROM Movies 
+ORDER BY rating DESC 
+LIMIT 5;
+
+/*Top 5 Box Office Hits*/
+SELECT name, box_office 
+FROM Movies 
+GROUP BY name 
+ORDER BY box_office DESC 
+LIMIT 5;
+
+/*Top 10 Highest pProfit*/
+ SELECT name, budget, box_office, (box_office - budget) AS profit 
+ FROM Movies
+ ORDER BY profit DESC
+ LIMIT 10
+
+/*Most Popular Genres*/
+SELECT genre, COUNT(*) AS genre_count
 FROM (
-    SELECT TRIM(value) AS genre 
-    FROM Movies CROSS JOIN json_each('["' || REPLACE(genre, ',', '","') || '"]')) 
-GROUP BY genre ORDER BY genre_count DESC LIMIT 5;
+  SELECT TRIM(value) AS genre
+  FROM Movies
+  CROSS JOIN json_each('["' || REPLACE(genre, ',', '","') || '"]')
+)
+GROUP BY genre
+ORDER BY genre_count DESC
+LIMIT 5
+
 
 SELECT directors, COUNT(*) AS Number_of_movies FROM Movies GROUP BY directors ORDER BY COUNT(*) DESC LIMIT 10;
 
