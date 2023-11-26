@@ -1,9 +1,10 @@
--First, we view our dataset--
+--First, we view our dataset---
 SELECT * FROM animeanime_list_cleaned; 
 
 --Then, we'll change the name of the dataset for a bit of ease.--
 ALTER TABLE animeanime_list_cleaned RENAME TO Anime;
 
+--And we check to see if this was successful--
 SELECT * FROM Anime;
 
 --Top 10 Rated Anime of All Time--
@@ -40,14 +41,8 @@ WHERE demographic = 'Seinen'
 ORDER BY rating DESC
 LIMIT 10
 
---Total Shoujo and Josei since 2013--
+--A list of Anime Since 2022--
 SELECT name, rating, rated_by, year,demographic
 FROM Anime
-WHERE year >= '2013' AND demographic = 'Shoujo' Or 'Josei'
-ORDER BY rating DESC
-
---Total Shounen and Seinen since 2013--
-SELECT name, rating, rated_by, year,demographic
-FROM Anime
-WHERE year >= '2013' AND demographic = 'Shounen' OR 'Seinen'
-ORDER BY rating DESC
+WHERE year >= 2012
+ORDER BY year DESC
